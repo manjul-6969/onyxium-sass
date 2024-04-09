@@ -1,1 +1,1 @@
-declare module "node-characterai"
+declare module "node-characterai";
