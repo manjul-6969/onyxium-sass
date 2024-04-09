@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { CharacterAI } from "node-characterai";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
     const characterAI = new CharacterAI();
     await characterAI.authenticateWithToken(process.env.ACCESS_TOKEN as string);
