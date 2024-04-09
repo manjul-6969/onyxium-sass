@@ -45,10 +45,22 @@ export default {
             backgroundPosition: "700px 0",
           },
         },
+        tilt: {
+          "0%, 50%, 100%": {
+            transform: "rotate(0deg)",
+          },
+          "25%": {
+            transform: "rotate(2deg)",
+          },
+          "75%": {
+            transform: "rotate(-2deg)",
+          },
+        },
       },
       animation: {
         flicker: "flicker 3s linear infinite",
         shimmer: "shimmer 1.3s linear infinite",
+        tilt: "tilt 10s infinite linear",
       },
     },
   },
