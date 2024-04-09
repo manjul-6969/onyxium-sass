@@ -1,6 +1,6 @@
 export async function sendMessage(message: string): Promise<string> {
   try {
-    if (!message || typeof message !== "string" || message.trim() === "") {
+    if (!message) {
       console.log("Message is invalid");
       throw new Error("Message is invalid");
     }

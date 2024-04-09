@@ -1,94 +1,112 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { sendMessage } from "@/utils/handlers/sendMessage";
 
-const ChatBox = () => {
-  const [message, setMessage] = useState("");
-  const [aiResponse, setAiResponse] = useState("");
+interface Message {
+  id: string;
+  text: string;
+  sender: "user" | "bot";
+}
+
+const ChatBox: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [message, setMessage] = useState<string>("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleMessageSend = async () => {
     try {
-      const response = await sendMessage(message);
-      setAiResponse(response);
-      console.log("AI Response:", response);
+      if (!message.trim()) return;
+
+      // Send user message
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        text: message.trim(),
+        sender: "user",
+      };
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+      // Get AI response
+      const botResponse = await sendMessage(message.trim());
+      const botMessage: Message = { id: Date.now().toString(), text: botResponse, sender: "bot" };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+
+      setMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
+      // Handle error: Display error message to the user
     }
   };
 
   return (
-    <div className="flex flex-col w-full h-screen">
-      <div className="flex flex-col w-full h-full">
-        <div className="flex flex-col-reverse">
-          <div className="max-w-3xl mx-auto p-2">
-            <div className="flex items-start gap-2">
-              <div className="hidden md:flex items-center">
-                <img
-                  alt="Stella"
-                  width="24"
-                  height="24"
-                  src="https://characterai.io/i/80/static/avatars/uploaded/2023/3/22/WOUx3xnZRql_j1TsQfS1TcNCI30D6uoPQvlGlKdYxHg.webp?webp=true&amp;anim=0"
-                  className="object-cover h-full"
-                />
-              </div>
-              <div className="flex flex-col gap-1 w-full">
-                <div className="flex items-center gap-2 font-medium">
-                  <div className="text-sm">Stella</div>
-                  <div className="rounded-full text-xs bg-secondary px-2">c.ai</div>
-                </div>
-                <div className="max-w-xl rounded-lg bg-surface-elevation-2 p-3">
-                  <p>
-                    what's up? my name is stella. i <em>could</em> help you with anything, but only
-                    when i feel like it. you'll never make me do your homework ;)
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="max-w-3xl mx-auto">
-            <div className="flex flex-col items-center justify-center gap-1 pt-12 lg:pt-32">
-              <button>
-                <img
-                  alt="Stella"
-                  width="64"
-                  height="64"
-                  src="https://characterai.io/i/80/static/avatars/uploaded/2023/3/22/WOUx3xnZRql_j1TsQfS1TcNCI30D6uoPQvlGlKdYxHg.webp?webp=true&amp;anim=0"
-                  className="object-cover h-full"
-                />
-              </button>
-              <p className="font-bold text-lg">Stella</p>
-              <p className="font-medium text-md">Not "Your" AI assistant</p>
-              <div className="text-xs">
-                <a href="/profile/landon" className="hover:text-primary">
-                  By @landon
-                </a>
-              </div>
-            </div>
-          </div>
+    <div className="flex flex-col h-screen">
+      <div className="flex flex-col-reverse flex-1 overflow-y-auto">
+        <div className="max-w-xl mx-auto p-4">
+          {messages.map((msg) => (
+            <Message key={msg.id} message={msg} />
+          ))}
+          <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="flex flex-col w-full max-w-2xl mx-auto">
-        <div className="flex items-end p-1 m-4 mb-10 border border-border-outline rounded-sm">
-          <textarea
-            className="flex-1 border-none bg-transparent text-lg focus:outline-none resize-none px-3"
-            placeholder="Message Stella..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          ></textarea>
-          <button
-            className="text-primary ml-2"
-            onClick={handleMessageSend}
-            disabled={!message.trim()}
-            aria-label="Send Message"
-          >
-            Send
-          </button>
+      <div className="flex items-end p-1 m-4 mb-10 border rounded-sm">
+        <textarea
+          className="flex-1 border-none bg-transparent text-lg focus:outline-none resize-none px-3"
+          placeholder="Message Stella..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        ></textarea>
+        <button
+          className="text-primary ml-2"
+          onClick={handleMessageSend}
+          aria-label="Send Message"
+          disabled={!message.trim()}
+        >
+          Send
+        </button>
+      </div>
+      <p className="text-xs text-gray-500 self-center mb-4">
+        Remember: Everything Characters say is made up!
+      </p>
+    </div>
+  );
+};
+
+interface MessageProps {
+  message: Message;
+}
+
+const Message: React.FC<MessageProps> = ({ message }) => {
+  const { text, sender } = message;
+  const isUser = sender === "user";
+
+  return (
+    <div className={`max-w-xl mx-auto p-4 ${isUser ? "order-1" : "order-2"}`}>
+      <div className={`flex items-start gap-2 ${isUser ? "justify-start" : "justify-end"}`}>
+        <div className="hidden md:flex items-center">
+          <img
+            alt={isUser ? "User" : "Stella"}
+            width="24"
+            height="24"
+            src={isUser ? "/user-avatar.png" : "/stella-avatar.png"}
+            className="object-cover h-full"
+          />
         </div>
-        {aiResponse && <p className="text-sm">{aiResponse}</p>}
-        <p className="absolute bottom-3 self-center text-xs text-muted-foreground select-none">
-          Remember: Everything Characters say is made up!
-        </p>
+        <div className="flex flex-col">
+          <div className="font-medium">{isUser ? "You" : "Stella"}</div>
+          <div className={`max-w-xl rounded-lg ${isUser ? "bg-gray-200" : "bg-primary"} p-3`}>
+            <p>{text}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

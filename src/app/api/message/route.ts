@@ -1,11 +1,17 @@
+"use server";
+
 import { NextApiRequest, NextApiResponse } from "next";
 import CharacterAI from "node-characterai";
 
 const characterAI = new CharacterAI();
+let isAuthenticated = false;
 
 async function authenticateWithToken() {
   try {
-    await characterAI.authenticateWithToken("2f763b38ad6c26368f5b6d3c86b2089bb98acfd4");
+    if (!isAuthenticated) {
+      await characterAI.authenticateWithToken("2f763b38ad6c26368f5b6d3c86b2089bb98acfd4");
+      isAuthenticated = true;
+    }
   } catch (error) {
     throw new Error("Failed to authenticate with session token: " + (error as Error).message);
   }
@@ -23,26 +29,33 @@ async function createChatClient(characterId: string) {
   }
 }
 
-export async function POST(err: Error, req: NextApiRequest, res: NextApiResponse, next: any) {
-  const message = req.body;
-  console.log("Received message:", message);
+export async function POST(req: any, res: NextApiResponse) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", ["POST"]);
+    res.status(405).json(`Method ${req.method} Not Allowed`);
+    return;
+  }
+
+  const message = await req.json();
+  // console.log("log 1:", message);
 
   try {
+    // console.log("log 2:", message);
     const characterId = "PH7dDFG7FXHnEIcTw8maMJypt142z7HLYqt6Vdz88YE";
 
     const chatClient = await createChatClient(characterId);
 
-    const response = await chatClient.sendAndAwaitResponse(message, true);
-    console.log(response);
+    const response = await chatClient.sendAndAwaitResponse(JSON.stringify(message), true);
+    // console.log(response);
     if (response && response.text) {
-      console.log("AI Response:", response.text);
-      res.status(200).json({ response: response.text });
+      // console.log("AI Response:", response.text);
+      return Response.json({ response: response.text });
     } else {
-      console.error("Invalid AI response:", response);
-      res.status(500).json({ error: "Invalid AI response" });
+      // console.error("Invalid AI response:", response);
+      return Response.json({ error: "Invalid AI response" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to send message" });
+    return Response.json({ error: "Failed to send message" });
   }
 }
