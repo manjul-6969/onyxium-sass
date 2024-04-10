@@ -1,3 +1,5 @@
+"use server";
+
 import { NextApiRequest, NextApiResponse } from "next";
 import CharacterAI from "@mahfuz07/node_characterai";
 
@@ -27,15 +29,17 @@ async function createChatClient(characterId: string) {
   }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: any, res: any) {
   if (req.method !== "POST") {
-    res.setHeader("Allow", ["POST"]);
-    res.status(405).json({ error: `Method ${req.method} Not Allowed` });
+    Response.apply("Allow", ["POST"]);
+    Response.json(`Method ${req.method} Not Allowed`);
     return;
   }
 
+  const message = await req.json();
+  // console.log("log 1:", message);
+
   try {
-    const message = req.body;
     console.log("log 2:", message);
     const characterId = "PH7dDFG7FXHnEIcTw8maMJypt142z7HLYqt6Vdz88YE";
 
@@ -45,13 +49,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // console.log(response);
     if (response && response.text) {
       // console.log("AI Response:", response.text);
-      return res.status(200).json({ response: response.text });
+      return Response.json({ response: response.text });
     } else {
       // console.error("Invalid AI response:", response);
-      return res.status(500).json({ error: "Invalid AI response" });
+      return Response.json({ error: "Invalid AI response" });
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to send message" });
+    return Response.json({ error: "Failed to send message" });
   }
 }
