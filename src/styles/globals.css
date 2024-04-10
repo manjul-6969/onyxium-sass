@@ -8436,7 +8436,7 @@ figcaption {
 button {
   --primary-color: #111;
   --secondary-color: #fff;
-  --hover-color: #645bff;
+  --hover-color: #a8bbff;
   --arrow-width: 8px; /* Adjusted arrow width */
   --arrow-stroke: 2px;
   box-sizing: border-box;

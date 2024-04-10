@@ -14,15 +14,14 @@ export default function HomePage() {
   return (
     <>
       <main className="page-wrapper">
-        Nothing here go to <a href="/chat">Chat</a>
-        {/* <Navbar />
+        <Navbar />
 
         <div className="main-wrapper">
           <Hero />
           <Testimonials />
           <Newsletter />
           <Footer />
-        </div> */}
+        </div>
       </main>
     </>
   );

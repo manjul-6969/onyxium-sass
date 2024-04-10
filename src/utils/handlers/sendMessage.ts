@@ -5,7 +5,7 @@ export async function sendMessage(message: string): Promise<string> {
       throw new Error("Message is invalid");
     }
 
-    const response = await fetch("https://onyxium.netlify.app/.netlify/functions/chat", {
+    const response = await fetch("/api/message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -38,7 +38,11 @@ const ChatBox: React.FC = () => {
 
       // Get AI response
       const botResponse = await sendMessage(message.trim());
-      const botMessage: Message = { id: Date.now().toString(), text: botResponse, sender: "bot" };
+      const botMessage: Message = {
+        id: Date.now().toString(),
+        text: botResponse,
+        sender: "bot", // Set sender as "bot" for bot's response
+      };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
 
       setMessage("");
@@ -48,9 +52,16 @@ const ChatBox: React.FC = () => {
     }
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleMessageSend();
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex flex-col-reverse flex-1 overflow-y-auto">
+      <div className="flex flex-col-reverse flex-1 overflow-y-auto max-h-80vh">
         <div className="max-w-xl mx-auto p-4">
           {messages.map((msg) => (
             <Message key={msg.id} message={msg} />
@@ -58,22 +69,26 @@ const ChatBox: React.FC = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="flex items-end p-1 m-4 mb-10 border rounded-sm">
-        <textarea
-          className="flex-1 border-none bg-transparent text-lg focus:outline-none resize-none px-3"
-          placeholder="Message Stella..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        ></textarea>
-        <button
-          className="text-primary ml-2"
-          onClick={handleMessageSend}
-          aria-label="Send Message"
-          disabled={!message.trim()}
-        >
-          Send
-        </button>
+      <div className="flex justify-center items-center p-4">
+        <div className="flex items-center border rounded-full max-w-md w-full">
+          <textarea
+            className="flex-1 border-none bg-transparent text-lg rounded-full border-white resize-none px-3 h-12"
+            placeholder="Message Stella..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyPress}
+          ></textarea>
+          <button
+            className="text-primary ml-2 flex-shrink-0"
+            onClick={handleMessageSend}
+            aria-label="Send Message"
+            disabled={!message.trim()}
+          >
+            Send
+          </button>
+        </div>
       </div>
+
       <p className="text-xs text-gray-500 self-center mb-4">
         Remember: Everything Characters say is made up!
       </p>
