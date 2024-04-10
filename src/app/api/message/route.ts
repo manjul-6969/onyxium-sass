@@ -40,7 +40,7 @@ export async function POST(req: any, res: NextApiResponse) {
   // console.log("log 1:", message);
 
   try {
-    // console.log("log 2:", message);
+    console.log("log 2:", message);
     const characterId = "PH7dDFG7FXHnEIcTw8maMJypt142z7HLYqt6Vdz88YE";
 
     const chatClient = await createChatClient(characterId);
