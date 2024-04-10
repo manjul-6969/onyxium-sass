@@ -1,0 +1,10 @@
+[build]
+command = "npm run build"        # Specify the build command for your project
+functions = ".netlify/functions" # Specify the directory where Netlify functions are located
+
+[[headers]]
+for = "/*"
+[headers.values]
+Access-Control-Allow-Origin = "*"
+Access-Control-Allow-Methods = "GET, POST"
+Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"

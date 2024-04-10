@@ -29,9 +29,9 @@ async function createChatClient(characterId: string) {
   }
 }
 
-export async function POST(req: any, res: any) {
+export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
-    Response.apply("Allow", ["POST"]);
+    // res.setHeader("Allow", ["POST"]);
     Response.json(`Method ${req.method} Not Allowed`);
     return;
   }
