@@ -5,7 +5,7 @@ export async function sendMessage(message: string): Promise<string> {
       throw new Error("Message is invalid");
     }
 
-    const response = await fetch("/api/message", {
+    const response = await fetch("/.netlify/functions/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
