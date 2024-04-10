@@ -4,6 +4,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import CharacterAI from "node_characterai";
 
 const characterAI = new CharacterAI();
+characterAI.puppeteerPath = "/chromedriver/linux/chromedriver";
+
 let isAuthenticated = false;
 
 async function authenticateWithToken() {
