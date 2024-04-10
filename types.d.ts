@@ -1,1 +1,1 @@
-declare module "@mahfuz07/node_characterai";
+declare module "node_characterai";
