@@ -35,6 +35,7 @@ const ChatBox: React.FC = () => {
         sender: "user",
       };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
+      setMessage("");
 
       // Get AI response
       const botResponse = await sendMessage(message.trim());
@@ -44,8 +45,6 @@ const ChatBox: React.FC = () => {
         sender: "bot", // Set sender as "bot" for bot's response
       };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
-
-      setMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
       // Handle error: Display error message to the user

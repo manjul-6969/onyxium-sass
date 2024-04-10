@@ -1,0 +1,11 @@
+FROM ghcr.io/puppeteer/puppeteer:latest
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+CMD ["npm", "start"]

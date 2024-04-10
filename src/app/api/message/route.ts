@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import CharacterAI from "node_characterai";
 
 const characterAI = new CharacterAI();
-characterAI.puppeteerPath = "/chromedriver/linux/chromedriver";
+characterAI.puppeteerPath = process.env.PUPPETEER_EXECUTABLE_PATH;
 
 let isAuthenticated = false;
 
