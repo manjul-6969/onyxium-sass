@@ -97,7 +97,11 @@ const Message: React.FC<MessageProps> = ({ message }) => {
             alt={isUser ? "User" : "Stella"}
             width="24"
             height="24"
-            src={isUser ? "/user-avatar.png" : "/stella-avatar.png"}
+            src={
+              isUser
+                ? "https://cdn.discordapp.com/avatars/857426474704830465/30b1869bc9920cbf8b7d767836296e1c.webp"
+                : "https://cdn.discordapp.com/avatars/824584513765376032/e551b8444bcf13ddc77c6164f25a8a0c.webp"
+            }
             className="object-cover h-full"
           />
         </div>

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import * as React from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import "@/styles/globals.css";
 // import "@/styles/colors.css";
@@ -41,7 +42,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics debug={false} />
+      </body>
     </html>
   );
 }
