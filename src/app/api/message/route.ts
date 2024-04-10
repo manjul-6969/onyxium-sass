@@ -1,7 +1,7 @@
 "use server";
 
 import { NextApiRequest, NextApiResponse } from "next";
-import CharacterAI from "node-characterai";
+import CharacterAI from "@mahfuz07/node_characterai";
 
 const characterAI = new CharacterAI();
 let isAuthenticated = false;
