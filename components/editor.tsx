@@ -3,7 +3,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { Post } from "@prisma/client";
 import { updatePost, updatePostMetadata } from "@/lib/actions";
-import { Editor as NovelEditor } from "novel";
 import TextareaAutosize from "react-textarea-autosize";
 import { cn } from "@/lib/utils";
 import LoadingDots from "./icons/loading-dots";
@@ -103,28 +102,6 @@ export default function Editor({ post }: { post: PostWithSite }) {
           className="dark:placeholder-text-600 w-full resize-none border-none px-0 placeholder:text-stone-400 focus:outline-none focus:ring-0 dark:bg-black dark:text-white"
         />
       </div>
-      <NovelEditor
-        className="relative block"
-        defaultValue={post?.content || undefined}
-        onUpdate={(editor) => {
-          setData((prev) => ({
-            ...prev,
-            content: editor?.storage.markdown.getMarkdown(),
-          }));
-        }}
-        onDebouncedUpdate={() => {
-          if (
-            data.title === post.title &&
-            data.description === post.description &&
-            data.content === post.content
-          ) {
-            return;
-          }
-          startTransitionSaving(async () => {
-            await updatePost(data);
-          });
-        }}
-      />
     </div>
   );
 }
