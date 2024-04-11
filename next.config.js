@@ -4,12 +4,24 @@ const nextConfig = {
   swcMinify: true,
 
   images: {
-    domains: ["res.cloudinary.com"],
+    remotePatterns: [
+      { hostname: "public.blob.vercel-storage.com" },
+      { hostname: "res.cloudinary.com" },
+      { hostname: "abs.twimg.com" },
+      { hostname: "pbs.twimg.com" },
+      { hostname: "avatar.vercel.sh" },
+      { hostname: "avatars.githubusercontent.com" },
+      { hostname: "www.google.com" },
+      { hostname: "flag.vercel.app" },
+      { hostname: "illustrations.popsy.co" },
+    ],
   },
 
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"));
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test?.(".svg"),
+    );
 
     config.module.rules.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
@@ -42,6 +54,11 @@ const nextConfig = {
       "puppeteer-extra",
       "puppeteer-extra-plugin-stealth",
     ],
+
+    serverActions: {
+      allowedOrigins: ["app.localhost:3000"],
+    },
+
     // serverMinification: false,
   },
 };
