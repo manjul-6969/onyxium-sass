@@ -1,5 +1,3 @@
-"use server";
-
 import { NextApiRequest, NextApiResponse } from "next";
 import CharacterAI from "node_characterai";
 
