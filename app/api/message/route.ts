@@ -8,6 +8,8 @@ const characterAI = new CharacterAI();
 
 let isAuthenticated = false;
 
+export const runtime = "edge";
+
 async function authenticateWithToken() {
   try {
     if (!isAuthenticated) {
@@ -66,5 +68,3 @@ export async function POST(req: any, res: NextApiResponse) {
     return Response.json({ error: "Failed to send message" });
   }
 }
-
-// export const runtime = "edge";
