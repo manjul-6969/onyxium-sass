@@ -58,6 +58,7 @@ const nextConfig = {
     serverActions: {
       allowedOrigins: ["app.localhost:3000"],
     },
+    runtime: "experimental-edge",
 
     // serverMinification: false,
   },

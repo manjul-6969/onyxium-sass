@@ -1,12 +1,23 @@
+"use server";
+
 import { NextApiRequest, NextApiResponse } from "next";
-import CharacterAI from "node_characterai";
+
+let CharacterAI: any;
+if (process.env.DEPLOYMENT === "serverless") {
+  CharacterAI = require("node_characterai");
+} else {
+  // Define a mock or fallback for when running in non-serverless environments
+  CharacterAI = {};
+}
+
+export const config = {
+  runtime: "experimental-edge",
+};
 
 const characterAI = new CharacterAI();
 // characterAI.puppeteerPath = process.env.PUPPETEER_EXECUTABLE_PATH;
 
 let isAuthenticated = false;
-
-export const runtime = "edge";
 
 async function authenticateWithToken() {
   try {
