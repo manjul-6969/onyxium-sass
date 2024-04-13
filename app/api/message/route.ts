@@ -1,17 +1,12 @@
-"use server";
+// "use server";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
 let CharacterAI: any;
-if (process.env.DEPLOYMENT === "serverless") {
-  CharacterAI = require("node_characterai");
-} else {
-  // Define a mock or fallback for when running in non-serverless environments
-  CharacterAI = {};
-}
+CharacterAI = require("node_characterai");
 
 export const config = {
-  runtime: "experimental-edge",
+  runtime: "edge",
 };
 
 const characterAI = new CharacterAI();
@@ -44,7 +39,7 @@ async function createChatClient(characterId: string) {
   }
 }
 
-export async function POST(req: any, res: NextApiResponse) {
+export async function POST(req: Request, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     res.status(405).json(`Method ${req.method} Not Allowed`);
