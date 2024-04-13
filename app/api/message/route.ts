@@ -5,10 +5,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 let CharacterAI: any;
 CharacterAI = require("node_characterai");
 
-export const config = {
-  runtime: "edge",
-};
-
 const characterAI = new CharacterAI();
 // characterAI.puppeteerPath = process.env.PUPPETEER_EXECUTABLE_PATH;
 
